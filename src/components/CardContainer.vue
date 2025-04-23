@@ -1,0 +1,112 @@
+<template>
+	<div class="wrapper">
+		<div
+			id="cont"
+			:class="flipped ? 'flipped' : 'notflipped'"
+			@click="flipped = !flipped"
+		>
+			<div class="question">
+				<div class="center">
+					Q: {{card.question}}
+				</div>
+			</div>
+			<div class="answer">
+				<div class="center">
+					A: {{card.answer}}
+				</div>
+			</div>
+			<!--<button @click="flipped = !flipped">Flip</button>-->
+		</div>
+	</div>
+</template>
+
+<script setup>
+import { defineProps, ref } from "vue";
+
+defineProps(["card", "index"]);
+
+const flipped = ref(false);
+</script>
+
+<style scoped>
+.wrapper {
+	scroll-snap-align: center;
+	perspective: 1000px;
+	height: 100%;
+	width: 100%;
+	flex: 0 0 100%;
+}
+
+#cont {
+	height: calc(100% - 200px);
+	width: calc(100% - 20px);
+	text-align: center;
+	/*border: 1px grey solid;*/
+	position: relative;
+
+	transition: transform 0.8s;
+
+	flex: 0 0 100%;
+	perspective: 1000px;
+	margin: 0;
+	transform-origin: center;
+	transform-style: preserve-3d;
+	margin: 100px 10px;
+}
+
+.nex, .prev {
+	display: none;
+}
+.nex {
+	transform: translateX(100vw);
+}
+
+.prev {
+	transform: translateX(-100vw);
+}
+
+.center {
+	position: absolute;
+	top: 50%;
+	width: 100%;
+	transform: translateY(-50%);
+}
+
+.question, .answer {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	overflow: hidden;
+	transition: transform 0.5s;
+	background-color: white;
+
+	border: 1px grey solid;
+	border-radius: 10px;
+	backface-visibility: hidden;
+}
+
+.question {
+	transform: rotateY(0deg);
+}
+
+.answer {
+	transform: rotateY(180deg);
+}
+
+.flipped {
+	transform: rotateY(180deg);
+}
+
+/*
+.flipped .question {
+	transform: rotateY(-180deg);
+}
+
+.flipped .answer {
+	transform: rotateY(360deg);
+}
+*/
+</style>
