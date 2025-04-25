@@ -2,29 +2,15 @@
 	<div class="wrapper">
 		<div
 			id="cont"
-			class="cont cardCont"
 			:class="flipped ? 'flipped' : 'notflipped'"
 			@click="flipped = !flipped"
-			ref="cont"
 		>
-			<div ref="question" class="question side">
-				<div
-					class="center"
-					v-html="`Q: ${getHtml(card.question)}`"
-					:style="{
-						transform: `scale(${qScale})`
-					}"
-				>
+			<div class="question">
+				<div class="center" v-html="getHtml(card.question)">
 				</div>
 			</div>
-			<div ref="answer" class="answer side">
-				<div
-					class="center"
-					v-html="`A: ${getHtml(card.answer)}`"
-					:style="{
-						transform: `scale(${aScale})`
-					}"
-				>
+			<div class="answer">
+				<div class="center" v-html="getHtml(card.answer)">
 				</div>
 			</div>
 			<!--<button @click="flipped = !flipped">Flip</button>-->
@@ -34,42 +20,34 @@
 
 <script setup>
 import { defineProps, ref } from "vue";
-import DOMPurify from 'dompurify';
 
 defineProps(["card", "index"]);
 
 const flipped = ref(false);
 
-const qScale = ref(1);
-const aScale = ref(1);
-
 function getHtml(text) {
-	// check for malicious html injection
-	text = DOMPurify.sanitize(text, {
-		ALLOWED_TAGS: ['b', 'i', 'u', 'strong', 'em', 'p', 'br', 'ul', 'ol', 'li', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'img', 'sup', 'sub'],
-		ALLOWED_ATTR: ['href', 'title']
-	});
 	// standard images
 	const regex = /\\img\{(https?:\/\/[^}]+)\}/g;
-	const replacement = '<img class="cardImg" src="$1"><br>';
+	const replacement = '<img width="50%" height="auto" src="$1"><br>';
 	let result = text.replace(regex, replacement);
 
-	return result.replaceAll("\n", "<br>");
+	// google drive images
+	const regex2 = /\\drive\{([^}]+)\}/g;
+	const replacement2 = '<img width="50%" height="auto" src="https://drive.google.com/thumbnail?id=$1&sz=w800">';
+	result = result.replace(regex2, replacement2);
+	console.log(result);
+
+	return result;
 }
 </script>
 
-<style>
+<style scoped>
 .wrapper {
 	scroll-snap-align: center;
 	perspective: 1000px;
 	height: 100%;
 	width: 100%;
 	flex: 0 0 100%;
-}
-
-.cardImg {
-	height: 100px;
-	width: auto;
 }
 
 #cont {

@@ -30,7 +30,8 @@ function scroll(dir) {
 .wrapper {
 	overflow: visible;
 	width: 90vw;
-	height: 80vw;
+	/*height: 80vw;*/
+	height: calc(63.6402206194vw + 200px);
 	position: relative;
 }
 .scrollX {

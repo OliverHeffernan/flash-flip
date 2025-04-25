@@ -2,25 +2,25 @@
 	<div class="wrapper">
 		<div
 			id="cont"
-			class="cont cardCont"
+			class="cont"
 			:class="flipped ? 'flipped' : 'notflipped'"
 			@click="flipped = !flipped"
 			ref="cont"
 		>
-			<div ref="question" class="question side">
+			<div ref="question" class="question">
 				<div
-					class="center"
-					v-html="`Q: ${getHtml(card.question)}`"
+					class="center q"
+					v-html="getHtml(card.question)"
 					:style="{
 						transform: `scale(${qScale})`
 					}"
 				>
 				</div>
 			</div>
-			<div ref="answer" class="answer side">
+			<div ref="answer" class="answer">
 				<div
-					class="center"
-					v-html="`A: ${getHtml(card.answer)}`"
+					class="center a"
+					v-html="getHtml(card.answer)"
 					:style="{
 						transform: `scale(${aScale})`
 					}"
@@ -36,7 +36,7 @@
 import { defineProps, ref } from "vue";
 import DOMPurify from 'dompurify';
 
-defineProps(["card", "index"]);
+const props = defineProps(["card", "index"]);
 
 const flipped = ref(false);
 
@@ -46,7 +46,7 @@ const aScale = ref(1);
 function getHtml(text) {
 	// check for malicious html injection
 	text = DOMPurify.sanitize(text, {
-		ALLOWED_TAGS: ['b', 'i', 'u', 'strong', 'em', 'p', 'br', 'ul', 'ol', 'li', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'img', 'sup', 'sub'],
+		ALLOWED_TAGS: ['b', 'i', 'u', 'strong', 'em', 'p', 'br', 'ul', 'ol', 'li', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'img'],
 		ALLOWED_ATTR: ['href', 'title']
 	});
 	// standard images
@@ -103,8 +103,11 @@ function getHtml(text) {
 .center {
 	position: absolute;
 	top: 50%;
-	width: 100%;
-	transform: translateY(-50%);
+	left: 50%;
+	width: auto;
+	height: auto;
+	/*width: 100%;*/
+	transform: translate(-50%, -50%);
 }
 
 .question, .answer {
