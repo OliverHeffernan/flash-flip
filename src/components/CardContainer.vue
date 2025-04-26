@@ -45,14 +45,10 @@ const aScale = ref(1);
 
 function getHtml(text) {
 	// check for malicious html injection
-	text = DOMPurify.sanitize(text, {
+	let result = DOMPurify.sanitize(text, {
 		ALLOWED_TAGS: ['b', 'i', 'u', 'strong', 'em', 'p', 'br', 'ul', 'ol', 'li', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'img', 'sup', 'sub'],
 		ALLOWED_ATTR: ['href', 'title']
 	});
-	// standard images
-	const regex = /\\img\{(https?:\/\/[^}]+)\}/g;
-	const replacement = '<img class="cardImg" src="$1"><br>';
-	let result = text.replace(regex, replacement);
 
 	return result.replaceAll("\n", "<br>");
 }

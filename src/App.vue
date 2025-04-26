@@ -1,4 +1,5 @@
 <template>
+	<ImageBay />
 	<input type="file" ref="fileInput" id="fileInput" accept=".flsh">
 	<button @click="readFileAsString">Load File</button>
 	<table v-if="editing" id="cardEditCont">
@@ -56,6 +57,7 @@
 <script setup>
 import { ref, nextTick } from "vue";
 import CardView from "./components/CardView.vue";
+import ImageBay from "./components/ImageBay.vue";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
