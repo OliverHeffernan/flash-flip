@@ -1,63 +1,72 @@
 <template>
-	<ImageBay />
-	<input type="file" ref="fileInput" id="fileInput" accept=".flsh">
-	<button @click="readFileAsString">Load File</button>
-	<table v-if="editing" id="cardEditCont">
-		<tr class="cardedit"
-			v-for="(card, index) in cardSet"
-			:key="index"
-		>
-			<td>{{index + 1}}.</td>
-			<td>
-				<textarea
-					@keyup.enter="onQuestionEnter(index)"
-					class="questionInput"
-					type="text"
-					v-model="card.question"
-					placeholder="question"
-					@input="resize($event.target)"
-				/>
-			</td>
-			<td>
-				<textarea
-					@keyup.enter="onAnswerEnter"
-					type="text"
-					class="answerInput"
-					v-model="card.answer"
-					placeholder="answer"
-					@input="resize($event.target)"
-				/>
-			</td>
-			<td>
-				<button
-					class="iconButton"
-					v-if="index != 0 || cardSet.length > 1"
-					@click="removeCard(index)"
-				>
-					<i class="fa-solid fa-trash"></i>
-				</button>
-			</td>
-		</tr>
-		<button class="iconButton" @click="editing = !editing">
+	<ImageBay 
+		@fileOpener="fileOpener = true"
+	/>
+	<div class="margins">
+		<FileOpener
+			:open="fileOpener"
+			@close="fileOpener = false"
+			@openFile="readFileAsString"
+		/>
+		<table v-if="editing" id="cardEditCont">
+			<tr class="cardedit"
+				v-for="(card, index) in cardSet"
+				:key="index"
+			>
+				<td class="label">{{index + 1}}.</td>
+				<td class="tableContent">
+					<textarea
+						@keyup.enter="onQuestionEnter(index)"
+						class="questionInput"
+						type="text"
+						v-model="card.question"
+						placeholder="question"
+						@input="resize($event.target)"
+					/>
+				</td>
+				<td class="tableContent">
+					<textarea
+						@keyup.enter="onAnswerEnter"
+						type="text"
+						class="answerInput"
+						v-model="card.answer"
+						placeholder="answer"
+						@input="resize($event.target)"
+					/>
+				</td>
+				<td class="tableContent">
+					<button
+						class="iconButton"
+						v-if="index != 0 || cardSet.length > 1"
+						@click="removeCard(index)"
+					>
+						<i class="fa-solid fa-trash"></i>
+					</button>
+				</td>
+			</tr>
+			<button class="iconButton" @click="editing = !editing">
+				<i :class="editing ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"></i>
+				<div class="tooltip">Show/hide the card edit boxes.</div>
+			</button>
+		</table>
+		<button v-if="editing" class="bubbleButton fullWidth" @click="newCard">
+			<i class="fa-solid fa-plus"></i> Add card
+		</button>
+		<button v-if="!editing" class="iconButton" @click="editing = !editing">
 			<i :class="editing ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"></i>
 		</button>
-		<button class="iconButton" @click="newCard">
-			<i class="fa-solid fa-plus"></i>
-		</button>
-	</table>
-	<button v-if="!editing" class="iconButton" @click="editing = !editing">
-		<i :class="editing ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"></i>
-	</button>
-	<button @click="doShuffle">Shuffle</button>
-	<button @click="logJSON">Download JSON</button>
-	<button @click="downloadPDF">Download as pdf</button>
-	<CardView :cardSet="cardSet" />
+		<button @click="doShuffle">Shuffle</button>
+		<button @click="logJSON">Download JSON</button>
+		<button @click="downloadPDF">Download as pdf</button>
+		<CardView :cardSet="cardSet" />
+	</div>
 </template>
 
 <script setup>
 import { ref, nextTick } from "vue";
 import CardView from "./components/CardView.vue";
 import ImageBay from "./components/ImageBay.vue";
+import FileOpener from "./components/FileOpener.vue";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -67,6 +76,8 @@ const emptyCard = {
 	question: "",
 	answer: ""
 };
+
+const fileOpener = ref(false);
 
 let cardSet = ref([{... emptyCard}]);
 
@@ -79,22 +90,12 @@ function logJSON() {
 	downloadTextFile(content, "set.flsh");
 }
 
-const fileInput = ref();
-function readFileAsString() {
-	const file = fileInput.value.files[0];
-
-	const reader = new FileReader();
-
-	reader.onload = function(e) {
-		console.log(e.target.result);
-		cardSet.value = JSON.parse(e.target.result).cards;
-		console.log(cardSet.value);
-	}
-	reader.onerror = function(e) {
-		console.log("An error occured", e);
-	}
-	reader.readAsText(file);
-}
+const readFileAsString = async (payload) => {
+	console.log(payload);
+	cardSet.value = payload;
+	await nextTick()
+	resizeAll();
+};
 
 function downloadTextFile(content, fileName) {
     const blob = new Blob([content], { type: 'text/plain' });
@@ -198,6 +199,13 @@ function resize(el) {
 	el.style.height = 'auto';
 	el.style.height = el.scrollHeight + 'px';
 }
+
+function resizeAll() {
+	const elms = document.getElementsByTagName("textarea");
+	for (let i = 0; i < elms.length; i++) {
+		resize(elms[i]);
+	}
+}
 </script>
 
 <style>
@@ -219,5 +227,61 @@ textarea {
 	font-size: 15px;
 	border: none;
 	background: none;
+}
+
+.margins {
+	width: min(100vw - 20px, 800px);
+	margin: 0 auto;
+}
+
+#cardEditCont {
+	width: 100%;
+}
+
+.tableContent {
+	width: calc(50% - 10px);
+}
+
+.tableContent textarea {
+	width: calc(100% - 30px);
+	margin-left: 10px;
+
+	border: 1px solid grey;
+	border-radius: 10px;
+	padding: 10px;
+}
+
+.label {
+	width: 10px;
+}
+
+.bubbleButton {
+	padding: 10px;
+	background-color: #68DDF0;
+	border-radius: 10px;
+	border: none;
+	white-space: nowrap;
+}
+
+.fullWidth {
+	width: calc(100% - 5px);
+	/*width: 100%;*/
+}
+.tooltip {
+	position: absolute;
+	right: 100%;
+	font-size: 12px;
+	white-space: nowrap;
+	background-color: rgb(30,30,30);
+	color: white;
+	padding: 5px;
+	pointer-events: none;
+	border-radius: 8px 0 8px 8px;
+	transition: opacity 0.1s linear 0.4s;
+	opacity: 0;
+}
+
+.iconButton:hover .tooltip {
+	opacity: 1;
 }
 </style>

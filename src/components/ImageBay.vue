@@ -1,6 +1,12 @@
 <template>
 	<div id="bay" :class="open ? 'open' : 'closed'">
-		<button @click="open = !open" class="iconButton"><i class="fa-solid fa-images"></i></button>
+		<button @click="open = !open" class="iconButton">
+			<i class="fa-solid fa-images"></i>
+		</button>
+		<button @click="openFileOpener" class="iconButton">
+			<i class="fa-solid fa-arrow-up-from-bracket"></i>
+			<div class="tooltip">Upload file from hard drive</div>
+		</button>
 		<div class="content">
 			Image bay not yet implemented. To get images in your cards, you can use the html tag &lt;img src="url of image" width="300px" height="auto"&gt;
 			<table>
@@ -30,7 +36,9 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
+
+const emit = defineEmits(["fileOpener"]);
 
 const open = ref(false);
 
@@ -43,6 +51,11 @@ const imgs = ref([
 		url: ""
 	}
 ]);
+
+const openFileOpener = () => {
+	console.log("emit");
+	emit('fileOpener', 'yoyo');
+}
 
 function removeImg(index) {
 	let found = false;

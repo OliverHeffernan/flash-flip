@@ -29,11 +29,15 @@ function scroll(dir) {
 <style scoped>
 .wrapper {
 	overflow: visible;
-	width: 90vw;
+	/*width: 90vw;*/
 	/*height: 80vw;*/
-	height: calc(63.6402206194vw + 200px);
+	/*height: calc(63.6402206194vw + 200px);*/
+	width: 100%;
+	aspect-ratio: 1.414 / 1;
+	padding-bottom: 200px;
 	position: relative;
 }
+
 .scrollX {
 	display: flex;
 	/*
