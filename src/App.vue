@@ -128,18 +128,33 @@ async function downloadPDF() {
 	};
 
 	const elms = document.getElementsByClassName("side");
+	const questions = document.getElementsByClassName("question");
+	const answers = document.getElementsByClassName("answer");
+	let qPage = true;
+	let q = 0;
+	let a = 0;
 	for (let i = 0; i < elms.length; i++) {
-		const ogTransform = elms[i].style.transform;
-		elms[i].style.transform = 'none';
-		const canvas = await html2canvas(elms[i], options);
-		elms[i].style.transform = ogTransform;
+		//const ogTransform = elms[i].style.transform;
+		const elm = qPage ? questions[q] : answers[a];
+		const ogTransform = elm.style.transform;
+		elm.style.transform = 'none';
+		const canvas = await html2canvas(elms, options);
+		elms.style.transform = ogTransform;
 
 		const imgData = canvas.toDataURL('image/png');
 
-		pdf.addImage(imgData, 'PNG', 0, 0, width, height);
+		const x = i % 2 == 0 ? 0 : width/(i%2);
+		const y = i % 2 == 0 ? 0 : height/(i%2);
+		pdf.addImage(imgData, 'PNG', x, y, width/2, height/2);
 
-		if (i != elms.length - 1) {
+		if (i != elms.length - 1 && i % 4 == 3) {
 			pdf.addPage();
+			qPage = !qPage;
+		}
+		if (qPage) {
+			q++;
+		} else {
+			a++;
 		}
 	}
 	pdf.save('cards.pdf');

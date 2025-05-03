@@ -117,6 +117,9 @@ function getHtml(text) {
 	border: 1px grey solid;
 	border-radius: 10px;
 	backface-visibility: hidden;
+
+	white-space: normal;
+	word-wrap: break-word;
 }
 
 .question {
