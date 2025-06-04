@@ -1,12 +1,19 @@
 <template>
 	<ImageBay 
 		@fileOpener="fileOpener = true"
+		@downloader="downloader = true"
 	/>
 	<div class="margins">
 		<FileOpener
 			:open="fileOpener"
 			@close="fileOpener = false"
 			@openFile="readFileAsString"
+		/>
+		<DownloaderPopup
+			:open="downloader"
+			@close="downloader = false"
+			@downloadJSON="logJSON"
+			@downloadPDF="downloadPDF"
 		/>
 		<table v-if="editing" id="cardEditCont">
 			<tr class="cardedit"
@@ -56,8 +63,6 @@
 			<i :class="editing ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"></i>
 		</button>
 		<button @click="doShuffle">Shuffle</button>
-		<button @click="logJSON">Download JSON</button>
-		<button @click="downloadPDF">Download as pdf</button>
 		<CardView :cardSet="cardSet" />
 	</div>
 </template>
@@ -66,6 +71,7 @@
 import { ref, nextTick } from "vue";
 import CardView from "./components/CardView.vue";
 import ImageBay from "./components/ImageBay.vue";
+import DownloaderPopup from "./components/DownloaderPopup.vue";
 import FileOpener from "./components/FileOpener.vue";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -78,6 +84,7 @@ const emptyCard = {
 };
 
 const fileOpener = ref(false);
+const downloader = ref(false);
 
 let cardSet = ref([{... emptyCard}]);
 
@@ -110,6 +117,7 @@ function downloadTextFile(content, fileName) {
 }
 
 async function downloadPDF() {
+	// setting up the pdf
 	const pdf = new jsPDF('l', 'mm', 'a4');
 	const width = pdf.internal.pageSize.getWidth();
 	const height = pdf.internal.pageSize.getHeight();
@@ -121,42 +129,38 @@ async function downloadPDF() {
 		allowTaint: false,
 		backgroundColor: '#FFFFFF',
 		scrollX: 0,
-		scrollY: 0,/*
-		windowWidth: element.scrollWidth,
-		windowHeight: element.scrollHeight,*/
+		scrollY: 0,
 		ignoreElements: (el) => el.tagName === 'SCRIPT'
 	};
 
+	// getting all of the elements that will be rendered in the pdf
 	const elms = document.getElementsByClassName("side");
-	const questions = document.getElementsByClassName("question");
-	const answers = document.getElementsByClassName("answer");
-	let qPage = true;
-	let q = 0;
-	let a = 0;
-	for (let i = 0; i < elms.length; i++) {
-		//const ogTransform = elms[i].style.transform;
-		const elm = qPage ? questions[q] : answers[a];
-		const ogTransform = elm.style.transform;
-		elm.style.transform = 'none';
-		const canvas = await html2canvas(elms, options);
-		elms.style.transform = ogTransform;
 
+	// looping through the elements
+	for (let i = 0; i < elms.length; i++) {
+		// getting the element
+		const elm = elms[i];
+		// remembering it's original transform, so that we can revert it after.
+		const ogTransform = elm.style.transform;
+
+		// setting it's transform to none, so that it is facing forward.
+		elm.style.transform = 'none';
+		// taking the element and converting it to a canvas.
+		const canvas = await html2canvas(elm, options);
+		// reverting the transform
+		elm.style.transform = ogTransform;
+		// converting the canvas to an image, that can be used in the pdf.
 		const imgData = canvas.toDataURL('image/png');
 
-		const x = i % 2 == 0 ? 0 : width/(i%2);
-		const y = i % 2 == 0 ? 0 : height/(i%2);
-		pdf.addImage(imgData, 'PNG', x, y, width/2, height/2);
+		// add the image to the pdf
+		pdf.addImage(imgData, 'PNG', 0, 0, width, height);
 
-		if (i != elms.length - 1 && i % 4 == 3) {
+		// if it is not the last image to be added, add a page to the pdf.
+		if (i != elms.length - 1) {
 			pdf.addPage();
-			qPage = !qPage;
-		}
-		if (qPage) {
-			q++;
-		} else {
-			a++;
 		}
 	}
+	// download the pdf
 	pdf.save('cards.pdf');
 }
 
@@ -280,8 +284,8 @@ textarea {
 
 .fullWidth {
 	width: calc(100% - 5px);
-	/*width: 100%;*/
 }
+
 .tooltip {
 	position: absolute;
 	right: 100%;
@@ -294,9 +298,53 @@ textarea {
 	border-radius: 8px 0 8px 8px;
 	transition: opacity 0.1s linear 0.4s;
 	opacity: 0;
+	min-width: 200px;
+	max-width: 1000px;
+	text-wrap: wrap;
+	text-align: left;
 }
 
-.iconButton:hover .tooltip {
+.iconButton:hover .tooltip, button:hover .tooltip {
 	opacity: 1;
+}
+
+.popupCont {
+	transition: opacity 0.2s;
+	display: flex;
+	z-index: 5;
+}
+
+.open {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.closed {
+	opacity: 0;
+	pointer-events: none;
+}
+
+.popup {
+	background-color: white;
+	padding: 20px;
+	padding-top: 40px;
+	border-radius: 20px;
+	width: auto;
+
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 15px;
+}
+
+.popup .iconButton {
+	position: absolute;
+	top: 5px;
+	right: 5px;
 }
 </style>

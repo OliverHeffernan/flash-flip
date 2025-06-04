@@ -1,12 +1,19 @@
 <template>
-	<div id="bay" :class="open ? 'open' : 'closed'">
-		<button @click="open = !open" class="iconButton">
-			<i class="fa-solid fa-images"></i>
-		</button>
-		<button @click="openFileOpener" class="iconButton">
-			<i class="fa-solid fa-arrow-up-from-bracket"></i>
-			<div class="tooltip">Upload file from hard drive</div>
-		</button>
+	<div id="bay" :class="open ? 'bayopen' : 'bayclosed'">
+		<div id="icons">
+			<button @click="open = !open" class="iconButton">
+				<i class="fa-solid fa-images"></i>
+				<div class="tooltip">Open or close the image sidebar. Use images in your flashcards.</div>
+			</button>
+			<button @click="openFileOpener" class="iconButton">
+				<i class="fa-solid fa-arrow-up-from-bracket"></i>
+				<div class="tooltip">Upload file from hard drive</div>
+			</button>
+			<button @click="openDownloader" class="iconButton">
+				<i class="fa-solid fa-download"></i>
+				<div class="tooltip">Download cards as JSON or pdf.</div>
+			</button>
+		</div>
 		<div class="content">
 			Image bay not yet implemented. To get images in your cards, you can use the html tag &lt;img src="url of image" width="300px" height="auto"&gt;
 			<table>
@@ -38,7 +45,7 @@
 <script setup>
 import { ref, defineEmits } from "vue";
 
-const emit = defineEmits(["fileOpener"]);
+const emit = defineEmits(["fileOpener", "downloader"]);
 
 const open = ref(false);
 
@@ -55,6 +62,10 @@ const imgs = ref([
 const openFileOpener = () => {
 	console.log("emit");
 	emit('fileOpener', 'yoyo');
+}
+
+const openDownloader = () => {
+	emit('downloader', 'yoyo');
 }
 
 function removeImg(index) {
@@ -96,12 +107,12 @@ function addImg() {
 	transition: all 0.2s;
 }
 
-.open {
+.bayopen {
 	width: min(90%, 500px);
 	box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
-.closed {
+.bayclosed {
 	width: 30px;
 }
 
@@ -111,4 +122,8 @@ function addImg() {
 	left: 40px;
 }
 
+#icons {
+	width: 30px;
+	display: block;
+}
 </style>
