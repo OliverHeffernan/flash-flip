@@ -285,11 +285,13 @@ textarea {
 }
 
 .bubbleButton {
-	padding: 10px;
+	padding: 15px;
 	/*background-color: #68DDF0;*/
 	/*background-color: ;*/
 	/*border: solid 2px #00FFAB;*/
-	border: solid 2px #7CDAFF;
+	/*border: solid 2px #7CDAFF;*/
+	border: solid 1px #6180BF;
+	background-color: #13202E;
 	font-size: 15px;
 	border-radius: 10px;
 	white-space: nowrap;
