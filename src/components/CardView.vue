@@ -9,19 +9,27 @@
 			/>
 		</div>
 	</div>
-	<button @click="scroll(-1)">Prev</button>
-	<button @click="scroll(1)">Next</button>
+	<div id="centerButtons">
+		<button class="iconButton" @click="scroll(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+		<button class="iconButton" @click="shuffle"><i class="fa-solid fa-shuffle"></i></button>
+		<button class="iconButton" @click="scroll(1)"><i class="fa-solid fa-chevron-right"></i></button>
+	</div>
 </template>
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, defineEmits } from "vue";
 import CardContainer from "./CardContainer.vue";
 
 defineProps(["cardSet"]);
+const emit = defineEmits(["shuffle"]);
 
 function scroll(dir) {
 	const pane = document.getElementById("cardScroll");
 	const scrollAmount = pane.offsetWidth;
 	pane.scrollBy({ left: scrollAmount * dir, behavior: 'smooth' });
+}
+
+function shuffle() {
+	emit("shuffle");
 }
 
 </script>
@@ -32,10 +40,15 @@ function scroll(dir) {
 	/*width: 90vw;*/
 	/*height: 80vw;*/
 	/*height: calc(63.6402206194vw + 200px);*/
-	width: 100%;
+	width: calc(100% - 30px);
 	aspect-ratio: 1.414 / 1;
 	padding-bottom: 200px;
 	position: relative;
+}
+
+#centerButtons {
+	width: calc(100% - 30px);
+	text-align: center;
 }
 
 .scrollX {

@@ -102,7 +102,7 @@ function addImg() {
 	height: 100%;
 	border-left: 1px solid grey;
 	z-index: 3;
-	background-color: white;
+	background-color: #0B1119;
 
 	transition: all 0.2s;
 }

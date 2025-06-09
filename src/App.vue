@@ -62,8 +62,8 @@
 		<button v-if="!editing" class="iconButton" @click="editing = !editing">
 			<i :class="editing ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"></i>
 		</button>
-		<button @click="doShuffle">Shuffle</button>
-		<CardView :cardSet="cardSet" />
+		<!--<button class="iconButton" @click="doShuffle"><i class="fa-solid fa-shuffle"></i></button>-->
+		<CardView @shuffle="doShuffle" :cardSet="cardSet" />
 	</div>
 </template>
 
@@ -105,15 +105,15 @@ const readFileAsString = async (payload) => {
 };
 
 function downloadTextFile(content, fileName) {
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+	const blob = new Blob([content], { type: 'text/plain' });
+	const url = window.URL.createObjectURL(blob);
+	const a = document.createElement('a');
+	a.href = url;
+	a.download = fileName;
+	document.body.appendChild(a);
+	a.click();
+	document.body.removeChild(a);
+	window.URL.revokeObjectURL(url);
 }
 
 async function downloadPDF() {
@@ -229,17 +229,27 @@ function resizeAll() {
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /*text-align: center;*/
-  color: #2c3e50;
-  margin-top: 60px;
+	font-family: Avenir, Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	/*text-align: center;*/
+	color: white;
+	background-color: #0B1119;
+	margin-top: 60px;
+}
+
+* {
+	color: white;
+}
+
+body, textarea, .side, button {
+	background-color: #0B1119;
 }
 
 textarea {
 	resize: none;
 	height: auto;
+	font-size: 15px;
 }
 
 .iconButton {
@@ -254,7 +264,7 @@ textarea {
 }
 
 #cardEditCont {
-	width: 100%;
+	width: calc(100% - 30px);
 }
 
 .tableContent {
@@ -276,14 +286,22 @@ textarea {
 
 .bubbleButton {
 	padding: 10px;
-	background-color: #68DDF0;
+	/*background-color: #68DDF0;*/
+	/*background-color: ;*/
+	/*border: solid 2px #00FFAB;*/
+	border: solid 2px #7CDAFF;
+	font-size: 15px;
 	border-radius: 10px;
-	border: none;
 	white-space: nowrap;
 }
 
+.bubbleButton i {
+	color: inherit;
+}
+
 .fullWidth {
-	width: calc(100% - 5px);
+	margin-left: 8px;
+	width: calc(100% - 48px);
 }
 
 .tooltip {
