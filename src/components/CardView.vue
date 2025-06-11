@@ -10,17 +10,49 @@
 		</div>
 	</div>
 	<div id="centerButtons">
-		<button class="iconButton" @click="scroll(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+		<button v-if="cardIndex > 0" class="iconButton" @click="scroll(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+		<button v-else class="iconButton" style="opacity: 0.5;"><i class="fa-solid fa-chevron-left"></i></button>
 		<button class="iconButton" @click="shuffle"><i class="fa-solid fa-shuffle"></i></button>
-		<button class="iconButton" @click="scroll(1)"><i class="fa-solid fa-chevron-right"></i></button>
+		<button v-if="cardIndex < cardSet.length - 1" class="iconButton" @click="scroll(1)"><i class="fa-solid fa-chevron-right"></i></button>
+		<button v-else class="iconButton" style="opacity: 0.5;"><i class="fa-solid fa-chevron-right"></i></button>
 	</div>
 </template>
 <script setup>
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits, onMounted, computed, ref } from "vue";
 import CardContainer from "./CardContainer.vue";
 
 defineProps(["cardSet"]);
 const emit = defineEmits(["shuffle"]);
+
+const loaded = ref(false);
+const scrollLeft = ref(0);
+const paneWidth = ref(0);
+
+onMounted(() => {
+	loaded.value = true;
+	const pane = document.getElementById("cardScroll");
+	if (pane) {
+		pane.addEventListener('scroll', updateScrollData);
+		updateScrollData();
+		loaded.value = true;
+	}
+});
+
+
+const cardIndex = computed(() => {
+	if (!loaded.value) {
+		return 0;
+	}
+	return Math.round((scrollLeft.value / paneWidth.value));
+});
+
+const updateScrollData = () => {
+	const pane = document.getElementById("cardScroll");
+	if (pane) {
+		scrollLeft.value = pane.scrollLeft;
+		paneWidth.value = pane.offsetWidth;
+	}
+};
 
 function scroll(dir) {
 	const pane = document.getElementById("cardScroll");
