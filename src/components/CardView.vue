@@ -38,7 +38,9 @@ onMounted(() => {
 	}
 });
 
-
+/**
+ * Gets the index of the card currently visible in the preview.
+ */
 const cardIndex = computed(() => {
 	if (!loaded.value) {
 		return 0;
@@ -46,6 +48,9 @@ const cardIndex = computed(() => {
 	return Math.round((scrollLeft.value / paneWidth.value));
 });
 
+/**
+ * Updates the scrollData refs so that the cardIndex also updates.
+ */
 const updateScrollData = () => {
 	const pane = document.getElementById("cardScroll");
 	if (pane) {
@@ -54,12 +59,18 @@ const updateScrollData = () => {
 	}
 };
 
+/**
+ * Called when the user clicks either the prev, or next card button. Flicks to the next or previous card depending on the dir.
+ */
 function scroll(dir) {
 	const pane = document.getElementById("cardScroll");
 	const scrollAmount = pane.offsetWidth;
 	pane.scrollBy({ left: scrollAmount * dir, behavior: 'smooth' });
 }
 
+/**
+ * emits shuffle, so that in App.vue, it will shuffle the cards.
+ */
 function shuffle() {
 	emit("shuffle");
 }
@@ -69,9 +80,6 @@ function shuffle() {
 <style scoped>
 .wrapper {
 	overflow: visible;
-	/*width: 90vw;*/
-	/*height: 80vw;*/
-	/*height: calc(63.6402206194vw + 200px);*/
 	width: calc(100% - 30px);
 	aspect-ratio: 1.414 / 1;
 	padding-bottom: 200px;

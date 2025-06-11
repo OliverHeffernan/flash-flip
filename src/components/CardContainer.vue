@@ -43,6 +43,10 @@ const flipped = ref(false);
 const qScale = ref(1);
 const aScale = ref(1);
 
+/**
+ * Sanitizes a given string, to avoid XSS.
+ * Allows some tags, so that people can style their cards, but avoids XSS.
+ */
 function getHtml(text) {
 	// check for malicious html injection
 	let result = DOMPurify.sanitize(text, {

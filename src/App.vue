@@ -1,26 +1,32 @@
 <template>
+	<!-- the right side bar -->
 	<ImageBay 
 		@fileOpener="fileOpener = true"
 		@downloader="downloader = true"
 	/>
 	<div class="margins">
+		<!-- a modal box for opening files -->
 		<FileOpener
 			:open="fileOpener"
 			@close="fileOpener = false"
 			@openFile="readFileAsString"
 		/>
+		<!-- a modal box for downloading files -->
 		<DownloaderPopup
 			:open="downloader"
 			@close="downloader = false"
 			@downloadJSON="logJSON"
 			@downloadPDF="downloadPDF"
 		/>
+		<!-- the card edit table -->
 		<table v-if="editing" id="cardEditCont">
+			<!-- repeating for each card -->
 			<tr class="cardedit"
 				v-for="(card, index) in cardSet"
 				:key="index"
 			>
 				<td class="label">{{index + 1}}.</td>
+				<!-- question edit -->
 				<td class="tableContent">
 					<textarea
 						@keyup.enter="onQuestionEnter(index)"
@@ -31,6 +37,7 @@
 						@input="resize($event.target)"
 					/>
 				</td>
+				<!-- answer edit -->
 				<td class="tableContent">
 					<textarea
 						@keyup.enter="onAnswerEnter"
@@ -41,6 +48,7 @@
 						@input="resize($event.target)"
 					/>
 				</td>
+				<!-- delete button -->
 				<td class="tableContent">
 					<button
 						class="iconButton"
@@ -51,6 +59,7 @@
 					</button>
 				</td>
 			</tr>
+			<!-- hide and show the table -->
 			<button class="iconButton" @click="editing = !editing">
 				<i :class="editing ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"></i>
 				<div class="tooltip">Show/hide the card edit boxes.</div>
@@ -88,15 +97,24 @@ const downloader = ref(false);
 
 let cardSet = ref([{... emptyCard}]);
 
+/**
+ * add an empty card
+ */
 function newCard() {
 	cardSet.value.push({... emptyCard});
 }
 
+/**
+ * download the json file
+ */
 function logJSON() {
 	const content = JSON.stringify({ "cards": cardSet.value });
 	downloadTextFile(content, "set.flsh");
 }
 
+/**
+ * loads the file from file input
+ */
 const readFileAsString = async (payload) => {
 	console.log(payload);
 	cardSet.value = payload;
@@ -104,6 +122,9 @@ const readFileAsString = async (payload) => {
 	resizeAll();
 };
 
+/**
+ * downloads a textfile. Used to download the json file
+ */
 function downloadTextFile(content, fileName) {
 	const blob = new Blob([content], { type: 'text/plain' });
 	const url = window.URL.createObjectURL(blob);
@@ -116,6 +137,9 @@ function downloadTextFile(content, fileName) {
 	window.URL.revokeObjectURL(url);
 }
 
+/**
+ * creates and downloads the pdf.
+ */
 async function downloadPDF() {
 	// setting up the pdf
 	const pdf = new jsPDF('l', 'mm', 'a4');
@@ -164,10 +188,16 @@ async function downloadPDF() {
 	pdf.save('cards.pdf');
 }
 
+/**
+ * apply a shuffle to the cardSet
+ */
 function doShuffle() {
 	cardSet.value = shuffleCards([...cardSet.value]);
 }
 
+/**
+ * shuffle a card set, returns the shuffled version
+ */
 function shuffleCards(set) {
 	let shuffled = [];
 	while (set.length > 0) {
@@ -176,10 +206,10 @@ function shuffleCards(set) {
 		set.splice(random, 1);
 	}
 
-	console.log(shuffled);
 	return shuffled;
 }
 
+// remove card from the card set, given the index.
 function removeCard(index) {
 	if (index == 0 && cardSet.value.length == 1) {
 		return;
@@ -187,6 +217,9 @@ function removeCard(index) {
 	cardSet.value.splice(index, 1);
 }
 
+/**
+ * when enter is pressed on the question field, it should shift focus to the answer
+ */
 function onQuestionEnter(index) {
 	//let thing = document.getElementsByClassName('questionInput')[index].value;
 	let thing = cardSet.value[index].question;
@@ -199,13 +232,16 @@ function onQuestionEnter(index) {
 	}
 }
 
+/**
+ * When enter is pressed on the answer field, it should create a new card,
+ * and then focus on the new card s question
+ */
 async function onAnswerEnter() {
 	const index = cardSet.value.length - 1;
 	//let thing = document.getElementsByClassName('answerInput')[index].value;
 	let thing = cardSet.value[index].answer;
 	if (thing.endsWith("\n\n")) {
 		// remove the double line break from the textarea
-		//document.getElementsByClassName('answerInput')[index].value = thing.substring(0, thing.length - 2);
 		cardSet.value[index].answer = thing.substring(0, thing.length - 2);
 		// create the new card, then wait for it to be created, then focus on its question
 		newCard();
@@ -214,11 +250,17 @@ async function onAnswerEnter() {
 	}
 }
 
+/**
+ * Resize a given textarea based on it's content.
+ */
 function resize(el) {
 	el.style.height = 'auto';
 	el.style.height = el.scrollHeight + 'px';
 }
 
+/**
+ * apply the resize method on all textareas.
+ */
 function resizeAll() {
 	const elms = document.getElementsByTagName("textarea");
 	for (let i = 0; i < elms.length; i++) {
