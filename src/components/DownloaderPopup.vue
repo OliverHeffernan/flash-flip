@@ -38,13 +38,15 @@ function closePopup() {
 </script>
 <style scoped>
 #json {
-	background-color: #FFB133;
+	background-color: #FFB13355;
+	border-color: #FFB133;
 	font-size: 15px;
 	margin-bottom: 5px;
 }
 
 #pdf {
-	background-color: #F24B4B;
+	background-color: #F24B4B55;
+	border-color: #F24B4B;
 	font-size: 15px;
 }
 

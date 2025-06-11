@@ -349,7 +349,8 @@ textarea {
 }
 
 .popup {
-	background-color: white;
+	background-color: #0B1118;
+	border: solid 1px grey;
 	padding: 20px;
 	padding-top: 40px;
 	border-radius: 20px;

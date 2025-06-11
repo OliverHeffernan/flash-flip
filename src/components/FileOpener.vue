@@ -5,7 +5,7 @@
 				<i class="fa-solid fa-xmark"></i>
 			</button>
 			<input type="file" ref="fileInput" id="fileInput" accept=".flsh">
-			<button @click="loadFile">Load File</button>
+			<button class="bubbleButton fullWidth fileButton" @click="loadFile">Load File</button>
 		</div>
 	</div>
 </template>
@@ -39,3 +39,10 @@ function loadFile() {
 	closePopup();
 }
 </script>
+
+<style scoped>
+.fileButton {
+	margin-top: 20px;
+	width: calc(100% - 15px);
+}
+</style>
