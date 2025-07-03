@@ -16,6 +16,12 @@
 					}"
 				>
 				</div>
+				<div
+					v-if="index==0"
+					class="clickTip"
+				>
+					Click the card to flip to answer.
+				</div>
 			</div>
 			<div ref="answer" class="answer side">
 				<div
@@ -59,6 +65,16 @@ function getHtml(text) {
 </script>
 
 <style>
+
+.clickTip {
+	position: absolute;
+	bottom: 20px;
+	width: 100%;
+	text-align: center;
+	opacity: 30%;
+	transition: opacity 0.2s;
+}
+
 .wrapper {
 	scroll-snap-align: center;
 	perspective: 1000px;
@@ -124,6 +140,11 @@ function getHtml(text) {
 
 	white-space: normal;
 	word-wrap: break-word;
+	scale: 95%;
+}
+
+.question:hover .clickTip, .answer:hover .clickTip {
+	opacity: 50%;
 }
 
 .question {
