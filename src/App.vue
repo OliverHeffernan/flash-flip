@@ -56,13 +56,35 @@
 						@click="removeCard(index)"
 					>
 						<i class="fa-solid fa-trash"></i>
+						<div class="tooltip left">Remove the card.</div>
 					</button>
+				</td>
+				<!-- Shift up and down buttons -->
+				<td class="tableContent">
+					<div class="iconButton updown">
+						<button
+							class="iconButton"
+							v-if="cardSet.length > 1 && index != 0"
+							@click="shiftCard(index, -1)"
+						>
+							<i class="fa-solid fa-chevron-up"></i>
+							<div class="tooltip left">Shift this card up one position.</div>
+						</button>
+						<button
+							class="iconButton"
+							v-if="(index != 0 || cardSet.length > 1) && index != cardSet.length - 1"
+							@click="shiftCard(index, 1)"
+						>
+							<i class="fa-solid fa-chevron-down"></i>
+							<div class="tooltip left">Shift this card down one position.</div>
+						</button>
+					</div>
 				</td>
 			</tr>
 			<!-- hide and show the table -->
 			<button class="iconButton" @click="editing = !editing">
 				<i :class="editing ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"></i>
-				<div class="tooltip">Show/hide the card edit boxes.</div>
+				<div class="tooltip right">Show/hide the card edit boxes.</div>
 			</button>
 		</table>
 		<button v-if="editing" class="bubbleButton fullWidth" @click="newCard">
@@ -103,6 +125,22 @@ let cardSet = ref([{... emptyCard}]);
  */
 function newCard() {
 	cardSet.value.push({... emptyCard});
+}
+
+/**
+ * Move the card to a different position. Relative.
+ * index is the current index of the card.
+ * dir should be either 1 or -1. 1 moving it down, and -1 moving it up.
+ */
+function shiftCard(index, dir) {
+	if (index > cardSet.value.length - 1 || index < 0) { return; }
+
+	const newIndex = index + dir;
+	if (newIndex >= cardSet.value.length || newIndex < 0) { return; }
+
+	const elm = cardSet.value[index];
+	cardSet.value.splice(index, 1);
+	cardSet.value.splice(newIndex, 0, elm);
 }
 
 /**
@@ -304,6 +342,7 @@ textarea {
 }
 
 .iconButton {
+	position: relative;
 	font-size: 15px;
 	border: none;
 	background: none;
@@ -360,7 +399,7 @@ textarea {
 .tooltip {
 	position: absolute;
 	right: 100%;
-	font-size: 12px;
+	font-size: 15px;
 	white-space: nowrap;
 	background-color: rgb(30,30,30);
 	color: white;
@@ -368,6 +407,7 @@ textarea {
 	pointer-events: none;
 	border-radius: 8px 0 8px 8px;
 	transition: opacity 0.1s linear 0.4s;
+	transition-delay: 0s;
 	opacity: 0;
 	min-width: 200px;
 	max-width: 1000px;
@@ -375,8 +415,17 @@ textarea {
 	text-align: left;
 }
 
+.right {
+	left: 100%;
+}
+
+.left {
+	right: 100%;
+}
+
 .iconButton:hover .tooltip, button:hover .tooltip {
 	opacity: 1;
+	transition-delay: 0.8s;
 }
 
 .popupCont {
@@ -418,5 +467,16 @@ textarea {
 	position: absolute;
 	top: 5px;
 	right: 5px;
+}
+
+.updown {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: auto 0;
+}
+
+.updown button {
+	margin: -5px;
 }
 </style>

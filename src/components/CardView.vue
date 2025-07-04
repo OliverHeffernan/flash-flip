@@ -10,11 +10,26 @@
 		</div>
 	</div>
 	<div id="centerButtons">
-		<button v-if="cardIndex > 0" class="iconButton" @click="scroll(-1)"><i class="fa-solid fa-chevron-left"></i></button>
-		<button v-else class="iconButton" style="opacity: 0.5;"><i class="fa-solid fa-chevron-left"></i></button>
-		<button class="iconButton" @click="shuffle"><i class="fa-solid fa-shuffle"></i></button>
-		<button v-if="cardIndex < cardSet.length - 1" class="iconButton" @click="scroll(1)"><i class="fa-solid fa-chevron-right"></i></button>
-		<button v-else class="iconButton" style="opacity: 0.5;"><i class="fa-solid fa-chevron-right"></i></button>
+		<button v-if="cardIndex > 0" class="iconButton" @click="scroll(-1)">
+			<i class="fa-solid fa-chevron-left"></i>
+			<div class="tooltip left">Move to the previous card.</div>
+		</button>
+		<button v-else class="iconButton" style="opacity: 0.5;">
+			<i class="fa-solid fa-chevron-left"></i>
+		</button>
+		<button class="iconButton" @click="shuffle">
+			<i class="fa-solid fa-shuffle"></i>
+			<div class="tooltip right">
+				Shuffle the cards. Warning, this action is irriversible. Save the set in JSON before doing this. See the download button in the right sidebar.
+			</div>
+		</button>
+		<button v-if="cardIndex < cardSet.length - 1" class="iconButton" @click="scroll(1)">
+			<i class="fa-solid fa-chevron-right"></i>
+			<div class="tooltip right">Move to the next card.</div>
+		</button>
+		<button v-else class="iconButton" style="opacity: 0.5;">
+			<i class="fa-solid fa-chevron-right"></i>
+		</button>
 	</div>
 </template>
 <script setup>
