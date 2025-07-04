@@ -95,6 +95,7 @@ const emptyCard = {
 const fileOpener = ref(false);
 const downloader = ref(false);
 
+
 let cardSet = ref([{... emptyCard}]);
 
 /**
@@ -270,22 +271,30 @@ function resizeAll() {
 </script>
 
 <style>
+:root {
+	--prim: #0B1119;
+	--text: #FFFFFF;
+	--border: #656668;
+	--btnBG: #13202E;
+	--btnBorder: #6180BF;
+}
+
 #app {
 	font-family: Avenir, Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	/*text-align: center;*/
-	color: white;
-	background-color: #0B1119;
+	color: var(--text);
+	background-color: var(--prim);
 	margin-top: 60px;
 }
 
 * {
-	color: white;
+	color: var(--text);
 }
 
 body, textarea, .side, button {
-	background-color: #0B1119;
+	background-color: var(--prim);
 }
 
 textarea {
@@ -317,7 +326,7 @@ textarea {
 	width: calc(100% - 30px);
 	margin-left: 10px;
 
-	border: 1px solid grey;
+	border: 1px solid var(--border);
 	border-radius: 10px;
 	padding: 10px;
 }
@@ -332,8 +341,8 @@ textarea {
 	/*background-color: ;*/
 	/*border: solid 2px #00FFAB;*/
 	/*border: solid 2px #7CDAFF;*/
-	border: solid 1px #6180BF;
-	background-color: #13202E;
+	border: solid 1px var(--btnBorder);
+	background-color: var(--btnBG);
 	font-size: 15px;
 	border-radius: 10px;
 	white-space: nowrap;
@@ -391,8 +400,8 @@ textarea {
 }
 
 .popup {
-	background-color: #0B1118;
-	border: solid 1px grey;
+	background-color: var(--prim);
+	border: solid 1px var(--border);
 	padding: 20px;
 	padding-top: 40px;
 	border-radius: 20px;

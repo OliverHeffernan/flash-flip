@@ -100,9 +100,9 @@ function addImg() {
 	right: 0;
 	top: 0;
 	height: 100%;
-	border-left: 1px solid grey;
+	border-left: 1px solid var(--border);
 	z-index: 3;
-	background-color: #0B1119;
+	background-color: var(--prim);
 
 	transition: all 0.2s;
 }
