@@ -132,7 +132,7 @@ function getHtml(text) {
 	text-align: center;
 	overflow: hidden;
 	transition: transform 0.5s;
-	background-color: white;
+	/*background-color: white;*/
 
 	border: 1px grey solid;
 	border-radius: 10px;
