@@ -4,6 +4,9 @@
 		@fileOpener="fileOpener = true"
 		@downloader="downloader = true"
 	/>
+
+	<SavePanel :cards="cardSet" />
+	
 	<div class="margins">
 		<!-- a modal box for opening files -->
 		<FileOpener
@@ -104,6 +107,7 @@ import CardView from "../components/CardView.vue";
 import ImageBay from "../components/ImageBay.vue";
 import DownloaderPopup from "../components/DownloaderPopup.vue";
 import FileOpener from "../components/FileOpener.vue";
+import SavePanel from "../components/SavePanel.vue";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 

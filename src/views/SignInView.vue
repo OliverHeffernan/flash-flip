@@ -45,6 +45,7 @@ async function handleSignIn() {
 		<button class="bubbleButton" :disabled="loading" @click="handleSignIn()">Sign In</button>
 
 		<ErrorBubble :errorMsg="error" />
+		<div v-if="success">You are now signed in.</div>
 	</div>
 </template>
 
