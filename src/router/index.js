@@ -5,6 +5,7 @@ import SignUpView from '../views/SignUpView.vue';
 import SignInView from '../views/SignInView.vue';
 import EmailConfirmView from '../views/EmailConfirmView.vue';
 import LibraryView from '../views/LibraryView.vue';
+import EmailConfirmation from '../views/EmailConfirmation.vue';
 
 const routes = [
 	{
@@ -37,7 +38,12 @@ const routes = [
 		path: '/library',
 		name: 'Library',
 		component: LibraryView
-	}
+	},
+	{
+		path: '/emailconf',
+		name: 'Email Confirmation',
+		component: EmailConfirmation,
+	},
 ];
 
 const router = createRouter({

@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase';
 
 import SetBox from '../components/SetBox.vue';
 import DeleteDialog from '../components/DeleteDialog.vue';
+import AccountBar from '../components/AccountBar.vue';
 
 const router = useRouter();
 
@@ -13,24 +14,34 @@ const user = ref(null);
 const sets = ref(null);
 
 async function checkUser() {
-	const thing = await supabase.auth.getUser();
-	user.value = thing;
-	console.log(user.value.data.user.id);
+	try {
+		const thing = await supabase.auth.getUser();
+		user.value = thing;
+		console.log(user.value.data.user.id);
+	} catch (error) {
+		console.log(error);
+		router.push({ name: "Sign In" });
+	}
 }
 
 async function getSets() {
-	const { data, error } = await supabase
-		.from('sets')
-		.select()
-		.eq('creator_id', user.value.data.user.id);
-	console.log(data);
-	console.log(error);
-	if (error) {
+	try {
+		const { data, error } = await supabase
+			.from('sets')
+			.select()
+			.eq('creator_id', user.value.data.user.id);
+		console.log(data);
 		console.log(error);
-		return;
-	}
+		if (error) {
+			console.log(error);
+			return;
+		}
 
-	sets.value = data;
+		sets.value = data;
+	} catch (error) {
+		console.log(error);
+		router.push({ name: "Sign In" });
+	}
 }
 
 const delTitle = ref(null);
@@ -91,6 +102,7 @@ onMounted(async () => {
 </script>
 
 <template>
+	<AccountBar />
 	<DeleteDialog :title="delTitle" @delete="confirmedDelete" @cancel="cancelDelete" />
 	<div class="margins">
 		<h1>Library</h1>

@@ -94,6 +94,7 @@ onMounted(checkUser);
 			<input type="text" v-model="title">
 			<button @click="save" class="iconButton"><i class="fa-solid fa-floppy-disk"></i></button>
 			<div class="savedText" v-if="lastSaved != ''">Last saved {{ dispTime }}</div>
+			<div class="savedText" v-else>Changes not saved</div>
 		</div>
 	</div>
 </template>

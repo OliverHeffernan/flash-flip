@@ -1,8 +1,13 @@
 <script setup>
 
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { supabase } from '../lib/supabase';
 import ErrorBubble from '../components/ErrorBubble.vue';
+import LoadingView from './LoadingView.vue';
+import AccountBar from '../components/AccountBar.vue';
+
+const router = useRouter();
 
 const displayname = ref('');
 const email = ref('');
@@ -23,7 +28,7 @@ async function signUpWithEmail() {
 			},
 		});
 		if (error) throw error;
-		alert('Check your email for confirmation');
+		router.push({ name: 'Email Confirmation' });
 	} catch (error) {
 		errorMsg.value = error.message;
 	} finally {
@@ -32,6 +37,8 @@ async function signUpWithEmail() {
 }
 </script>
 <template>
+	<AccountBar />
+	<LoadingView v-if="loading" />
 	<div class="margins">
 		<h2>Sign Up</h2>
 		<h3>Display name</h3>

@@ -1,4 +1,5 @@
 <template>
+	<AccountBar />
 	<!-- the right side bar -->
 	<ImageBay 
 		@fileOpener="fileOpener = true"
@@ -110,6 +111,7 @@ import DownloaderPopup from "../components/DownloaderPopup.vue";
 import FileOpener from "../components/FileOpener.vue";
 import SavePanel from "../components/SavePanel.vue";
 import LoadingView from "./LoadingView.vue";
+import AccountBar from '../components/AccountBar.vue';
 
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -118,6 +120,7 @@ import { supabase } from '../lib/supabase';
 const props = defineProps(['set_id']);
 
 onMounted(async () => {
+	window.onbeforeunload = () => 'Make sure you have saved your changes';
 	console.log("set_id: ", props.set_id);
 	if (props.set_id == "null"){
 		title.value = "Untitled Set";

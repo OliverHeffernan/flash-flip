@@ -1,10 +1,12 @@
 <template>
 	<div id="bay" :class="open ? 'bayopen' : 'bayclosed'">
 		<div id="icons">
+			<!--
 			<button @click="open = !open" class="iconButton">
 				<i class="fa-solid fa-images"></i>
 				<div class="tooltip left">Open or close the image sidebar. Use images in your flashcards.</div>
 			</button>
+-->
 			<button @click="openFileOpener" class="iconButton">
 				<i class="fa-solid fa-arrow-up-from-bracket"></i>
 				<div class="tooltip left">Upload file from hard drive</div>

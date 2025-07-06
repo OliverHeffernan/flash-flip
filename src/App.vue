@@ -13,6 +13,7 @@ import { RouterView/*, RouterLink*/ } from 'vue-router';
 <style>
 :root {
 	--prim: #0B1119;
+	--sec: #13202E;
 	--text: #FFFFFF;
 	--border: #656668;
 	--btnBG: #13202E;
@@ -28,6 +29,13 @@ import { RouterView/*, RouterLink*/ } from 'vue-router';
 	color: var(--text);
 	background-color: var(--prim);
 	margin-top: 60px;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	margin: 0;
+	padding: 0;
 }
 
 * {
@@ -73,7 +81,7 @@ textarea {
 }
 
 .margins {
-	width: min(100vw - 20px, 800px);
+	width: min(100vw - 80px, 800px);
 	margin: 0 auto;
 }
 
