@@ -159,13 +159,4 @@ function getHtml(text) {
 	transform: rotateY(180deg);
 }
 
-/*
-.flipped .question {
-	transform: rotateY(-180deg);
-}
-
-.flipped .answer {
-	transform: rotateY(360deg);
-}
-*/
 </style>

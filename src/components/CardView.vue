@@ -108,10 +108,6 @@ function shuffle() {
 
 .scrollX {
 	display: flex;
-	/*
-	width: 90vw;
-	height: 60vw;
-	*/
 	width: 100%;
 	height: 100%;
 	overflow-x: auto;

@@ -9,7 +9,7 @@ const emit = defineEmits(['delete', 'cancel']);
 	<div v-if="title" class="popup">
 		<p>Are you sure you would like to delete "{{title}}"? This action is irriversible.</p>
 		<p>
-			<button @click="emit('delete')" class="bubbleButton">Yes</button>
+			<button @click="emit('delete')" class="bubbleButton fr">Yes</button>
 			<button @click="emit('cancel')" class="bubbleButton">No</button>
 		</p>
 	</div>
@@ -33,7 +33,7 @@ p {
 	margin: 0;
 }
 
-.popup button:first-of-type {
+.fr {
 	margin-right: 10px;
 }
 .popup button {

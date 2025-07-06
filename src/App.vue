@@ -65,8 +65,6 @@ input:focus {
 	outline: none;
 }
 
-input:
-
 textarea {
 	resize: none;
 	height: auto;
