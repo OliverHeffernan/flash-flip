@@ -5,7 +5,8 @@
 		@downloader="downloader = true"
 	/>
 
-	<SavePanel :cards="cardSet" />
+	<SavePanel v-if="title" :cards="cardSet" :title="title" />
+	<LoadingView v-if="loading" />
 	
 	<div class="margins">
 		<!-- a modal box for opening files -->
@@ -102,14 +103,47 @@
 </template>
 
 <script setup>
-import { ref, nextTick } from "vue";
+import { ref, nextTick, defineProps, onMounted } from "vue";
 import CardView from "../components/CardView.vue";
 import ImageBay from "../components/ImageBay.vue";
 import DownloaderPopup from "../components/DownloaderPopup.vue";
 import FileOpener from "../components/FileOpener.vue";
 import SavePanel from "../components/SavePanel.vue";
+import LoadingView from "./LoadingView.vue";
+
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { supabase } from '../lib/supabase';
+
+const props = defineProps(['set_id']);
+
+onMounted(async () => {
+	console.log("set_id: ", props.set_id);
+	if (props.set_id == "null"){
+		title.value = "Untitled Set";
+		loading.value = false;
+		return;
+	}
+	
+	const { data, error } = await supabase
+		.from('sets')
+		.select()
+		.eq('id', props.set_id);
+	console.log("data: ", data);
+	console.log("error: ", error);
+
+	if (error) {
+		loading.value = false;
+		return;
+	}
+	if (!data) {
+		loading.value = false;
+		return;
+	}
+	cardSet.value = JSON.parse(data[0].set_data).cards;
+	title.value = data[0].title;
+	loading.value = false;
+});
 
 const editing = ref(true);
 
@@ -121,8 +155,9 @@ const emptyCard = {
 const fileOpener = ref(false);
 const downloader = ref(false);
 
-
-let cardSet = ref([{... emptyCard}]);
+const title = ref(null);
+const cardSet = ref([{... emptyCard}]);
+const loading = ref(true);
 
 /**
  * add an empty card

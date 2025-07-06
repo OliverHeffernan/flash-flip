@@ -4,7 +4,6 @@ import { supabase } from "../lib/supabase.js";
 import { useRoute } from "vue-router";
 const route = useRoute();
 
-const title = ref("Untitled Set");
 const lastSaved = ref("");
 const user = ref(null);
 const setId = ref(route.query.setId | null);
@@ -29,7 +28,9 @@ const dispTime = computed(() => {
 	return `today ${lastHour}:${lastMinute}`;
 });
 
-const props = defineProps(["cards"]);
+const props = defineProps(["cards", "title"]);
+const title = ref(props.title);
+console.log("title", props.title);
 
 async function checkUser() {
 	const thing = await supabase.auth.getUser();
@@ -85,6 +86,7 @@ async function save() {
 }
 
 onMounted(checkUser);
+
 </script>
 <template>
 	<div class="panel">

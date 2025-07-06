@@ -13,9 +13,10 @@ const routes = [
 		component: LandingView,
 	},
 	{
-		path: '/edit',
+		path: '/edit/:set_id',
 		name: 'Edit',
 		component: EditView,
+		props: true,
 	},
 	{
 		path: '/signup',
