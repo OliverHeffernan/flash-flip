@@ -14,7 +14,7 @@ function signIn() {
 	<div class="pageSpread">
 		<h1>Welcome to <TextLogo /></h1>
 		<h2>A free, student-friendly flashcard app for smarter studying.</h2>
-		<RouterLink v-if="!signedIn" to="/login" class="bubbleButton fr">Sign In</RouterLink>
+		<RouterLink v-if="!signedIn" to="/signin" class="bubbleButton fr">Sign In</RouterLink>
 		<RouterLink v-if="!signedIn" to = "/signup" class="bubbleButton">Sign Up</RouterLink>
 	</div>
 	<div class="margins">
