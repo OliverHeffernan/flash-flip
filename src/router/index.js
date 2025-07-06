@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import EditView from '../views/EditView.vue';
 import LandingView from '../views/LandingView.vue';
 import SignUpView from '../views/SignUpView.vue';
@@ -47,7 +47,7 @@ const routes = [
 ];
 
 const router = createRouter({
-	history: createWebHistory(),
+	history: createWebHashHistory(),
 	routes,
 });
 
