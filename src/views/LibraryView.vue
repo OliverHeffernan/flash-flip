@@ -17,9 +17,7 @@ async function checkUser() {
 	try {
 		const thing = await supabase.auth.getUser();
 		user.value = thing;
-		console.log(user.value.data.user.id);
 	} catch (error) {
-		console.log(error);
 		router.push({ name: "Sign In" });
 	}
 }
@@ -30,16 +28,12 @@ async function getSets() {
 			.from('sets')
 			.select()
 			.eq('creator_id', user.value.data.user.id);
-		console.log(data);
-		console.log(error);
 		if (error) {
-			console.log(error);
 			return;
 		}
 
 		sets.value = data;
 	} catch (error) {
-		console.log(error);
 		router.push({ name: "Sign In" });
 	}
 }
@@ -49,8 +43,6 @@ let delId = null;
 
 function deleteDialog(payload) {
 	const { id, title } = payload;
-	console.log(id);
-	console.log(title);
 
 	delTitle.value = title;
 	delId = id;
@@ -58,16 +50,14 @@ function deleteDialog(payload) {
 }
 
 async function deleteSet(id) {
-	const { data, error } = await supabase
+	const error = await supabase
 		.from('sets')
 		.delete()
-		.eq('id', id);
+		.eq('id', id).error;
 	if (error) {
-		console.log(error);
 		alert(error);
 		return;
 	}
-	console.log(data);
 	removeSetFromArray(id);
 
 	alert("Set deleted");

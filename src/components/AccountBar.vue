@@ -22,7 +22,6 @@ async function checkUser() {
 	user.value = name;
 	loading.value = false;
 	emit("signedIn");
-	//console.log(user.value.data.user.user_metadata.display_name);
 }
 
 async function signOut() {

@@ -17,7 +17,6 @@ const loading = ref(true);
 const success = ref(false);
 
 async function handleSignIn() {
-	console.log("kia ora");
 	try {
 		loading.value = true;
 		error.value = null;
@@ -27,9 +26,9 @@ async function handleSignIn() {
 			email: email.value,
 			password: password.value,
 		});
+		console.log(data);
 
 		if (signInError) throw signInError;
-		console.log(data);
 
 		success.value = true;
 		router.push({ name: "Library" });
@@ -42,8 +41,6 @@ async function handleSignIn() {
 
 async function checkUser() {
 	const thing = await supabase.auth.getUser();
-	//console.log(user.value.data.user.id);
-	console.log(thing);
 	if (!thing.data.user) {
 		loading.value = false;
 		return;

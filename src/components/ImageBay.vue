@@ -62,7 +62,6 @@ const imgs = ref([
 ]);
 
 const openFileOpener = () => {
-	console.log("emit");
 	emit('fileOpener', 'yoyo');
 }
 
@@ -83,7 +82,6 @@ function removeImg(index) {
 	if (!found) {
 		return;
 	}
-	console.log("found");
 	imgs.value.splice(value, 1);
 }
 

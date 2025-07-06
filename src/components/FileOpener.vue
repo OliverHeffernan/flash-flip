@@ -22,17 +22,15 @@ function closePopup() {
 
 const fileInput = ref();
 function loadFile() {
-	console.log("load file");
 	const file = fileInput.value.files[0];
 
 	const reader = new FileReader();
 
 	reader.onload = function(e) {
-		console.log("return");
 		emit("openFile", JSON.parse(e.target.result).cards);
 	}
 	reader.onerror = function(e) {
-		console.log("An error occured", e);
+		console.log(e);
 		return "ERROR";
 	}
 	reader.readAsText(file);

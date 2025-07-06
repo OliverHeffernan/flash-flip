@@ -30,12 +30,10 @@ const dispTime = computed(() => {
 
 const props = defineProps(["cards", "title"]);
 const title = ref(props.title);
-console.log("title", props.title);
 
 async function checkUser() {
 	const thing = await supabase.auth.getUser();
 	user.value = thing;
-	console.log(user.value);
 }
 
 async function save() {
@@ -46,9 +44,7 @@ async function save() {
 		}
 		let data, error;
 		// update if already existing
-		console.log(setId.value);
 		if (setId.value) {
-			console.log("update");
 			({ data, error } = await supabase
 				.from('sets')
 				.update({
@@ -70,14 +66,11 @@ async function save() {
 				}])
 				.select()
 			);
-			console.log(data);
 			setId.value = data[0].id;
 		}
 		if (error) {
 			alert("Failed to save");
 		}
-
-		console.log(data);
 
 		lastSaved.value = new Date();
 	} catch (error) {

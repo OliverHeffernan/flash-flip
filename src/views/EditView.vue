@@ -121,7 +121,6 @@ const props = defineProps(['set_id']);
 
 onMounted(async () => {
 	window.onbeforeunload = () => 'Make sure you have saved your changes';
-	console.log("set_id: ", props.set_id);
 	if (props.set_id == "null"){
 		title.value = "Untitled Set";
 		loading.value = false;
@@ -132,8 +131,6 @@ onMounted(async () => {
 		.from('sets')
 		.select()
 		.eq('id', props.set_id);
-	console.log("data: ", data);
-	console.log("error: ", error);
 
 	if (error) {
 		loading.value = false;
@@ -197,7 +194,6 @@ function logJSON() {
  * loads the file from file input
  */
 const readFileAsString = async (payload) => {
-	console.log(payload);
 	cardSet.value = payload;
 	await nextTick()
 	resizeAll();
