@@ -23,6 +23,12 @@
 			@downloadJSON="logJSON"
 			@downloadPDF="downloadPDF"
 		/>
+		<RouterLink :to="{ name: 'Repetition', params: { set_id: props.set_id }}">
+			<div class="bubbleButton">
+				Practice this set
+				<div class="tooltip down">Learn the cards, focussing on the ones you don't know.</div>
+			</div>
+		</RouterLink>
 		<!-- the card edit table -->
 		<table v-if="editing" id="cardEditCont">
 			<!-- repeating for each card -->
@@ -149,7 +155,8 @@ const editing = ref(true);
 
 const emptyCard = {
 	question: "",
-	answer: ""
+	answer: "",
+	familiarity: 0
 };
 
 const fileOpener = ref(false);
@@ -349,5 +356,9 @@ function resizeAll() {
 <style scoped>
 .side {
 	background-color: var(--prim);
+}
+
+.bubbleButton {
+	text-align: center;
 }
 </style>

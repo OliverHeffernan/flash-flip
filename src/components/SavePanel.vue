@@ -25,8 +25,13 @@ const dispTime = computed(() => {
 	if (lastYear != year || lastMonth != month || lastDay != day) {
 		return `${lastDay} ${lastMonth} ${lastYear}`;
 	}
-	return `today ${lastHour}:${lastMinute}`;
+	return `today ${lastHour}:${zeroPad(lastMinute)}`;
 });
+
+function zeroPad(number) {
+	if (number > 9 || number < 0) return number.toString();
+	return "0" + number;
+}
 
 const props = defineProps(["cards", "title"]);
 const title = ref(props.title);
@@ -48,7 +53,7 @@ async function save() {
 			({ data, error } = await supabase
 				.from('sets')
 				.update({
-					set_data: {"cards": props.cards},
+					set_data: `{"cards": ${JSON.stringify(props.cards)}}`,
 					title: title.value,
 					updated_at: new Date().toISOString(),
 				})
@@ -60,7 +65,7 @@ async function save() {
 			({ data, error } = await supabase
 				.from('sets')
 				.insert([{
-					creator_id: user.value.data.user.id, 
+					creator_id: user.value.data.user.id,
 					set_data: `{"cards":${JSON.stringify(props.cards)}}`,
 					title: title.value,
 				}])

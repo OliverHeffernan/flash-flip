@@ -1,5 +1,5 @@
 <template>
-	<div class="wrapper">
+	<div :class="`wrapper ${spacedRepetition ? 'animated' : ''} ${state}`">
 		<div
 			id="cont"
 			class="cont cardCont"
@@ -32,6 +32,10 @@
 					}"
 				>
 				</div>
+				<div class="setPriority" v-if="spacedRepetition">
+					<button @click="out('known', $event)" class="bubbleButton">I know this</button>
+					<button @click="out('unknown', $event)" class="bubbleButton">I don't know this</button>
+				</div>
 			</div>
 			<!--<button @click="flipped = !flipped">Flip</button>-->
 		</div>
@@ -39,10 +43,48 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from "vue";
+import { defineProps, onMounted, watch, defineEmits, ref } from "vue";
 import DOMPurify from 'dompurify';
 
-defineProps(["card", "index"]);
+
+//defineProps(["card", "index", "spacedRepetition"]);
+
+const props = defineProps({
+	card: {
+		type: Object,
+		required: true
+	},
+	index: {
+		type: Number,
+		required: true
+	},
+	spacedRepetition: {
+		type: Boolean,
+		default: false
+	}
+});
+
+const state = ref("out");
+if (!props.spacedRepetition) {
+	state.value = "";
+}
+
+onMounted(async() => {
+	if (!props.spacedRepetition) return;
+	setTimeout(() => {
+		state.value = 'in'; // Trigger the animation after a brief delay
+	}, 10);
+});
+
+watch(() => props.card, () => {
+	if (!props.spacedRepetition) return;
+	state.value = "out";
+	setTimeout(() => {
+		state.value = 'in'; // Trigger the animation after a brief delay
+	}, 10);
+});
+
+const emit = defineEmits(['known', 'unknown']);
 
 const flipped = ref(false);
 
@@ -61,6 +103,17 @@ function getHtml(text) {
 	});
 
 	return result.replaceAll("\n", "<br>");
+}
+
+async function out(emitString, event) {
+	event.stopPropagation();
+	state.value = "out";
+	setTimeout(() => {
+		flipped.value = false;
+		setTimeout(() => {
+			emit(emitString);
+		}, 300);
+	}, 200);
 }
 </script>
 
@@ -157,6 +210,30 @@ function getHtml(text) {
 
 .flipped {
 	transform: rotateY(180deg);
+}
+
+.setPriority {
+	position: absolute;
+	bottom: 30px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.setPriority button {
+	margin: 10px;
+	width: 150px;
+}
+
+.animated {
+	transition: all 0.4s;
+}
+
+.out {
+	transform: translateY(-200vh);
+}
+
+.in {
+	transform: translateY(0);
 }
 
 </style>

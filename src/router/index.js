@@ -6,6 +6,7 @@ import SignInView from '../views/SignInView.vue';
 import EmailConfirmView from '../views/EmailConfirmView.vue';
 import LibraryView from '../views/LibraryView.vue';
 import EmailConfirmation from '../views/EmailConfirmation.vue';
+import SpacedRepetition from '../views/SpacedRepetition.vue';
 
 const routes = [
 	{
@@ -18,6 +19,12 @@ const routes = [
 		name: 'Edit',
 		component: EditView,
 		props: true,
+	},
+	{
+		path: '/spacedrepetition/:set_id',
+		name: 'Repetition',
+		component: SpacedRepetition,
+		props: true
 	},
 	{
 		path: '/signup',

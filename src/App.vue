@@ -105,6 +105,7 @@ textarea {
 }
 
 .bubbleButton {
+	position: relative;
 	padding: 15px;
 	border: solid 1px var(--btnBorder);
 	background-color: var(--btnBG);
@@ -141,6 +142,8 @@ textarea {
 	max-width: 1000px;
 	text-wrap: wrap;
 	text-align: left;
+
+	box-shadow: 0 0 5px 0 rgba(255,255,255,0.5);
 }
 
 .right {
@@ -151,7 +154,13 @@ textarea {
 	right: 100%;
 }
 
-.iconButton:hover .tooltip, button:hover .tooltip {
+.down {
+	top: 100%;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.iconButton:hover .tooltip, button:hover .tooltip, .bubbleButton:hover .tooltip {
 	opacity: 1;
 	transition-delay: 0.8s;
 }
