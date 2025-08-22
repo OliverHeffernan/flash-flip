@@ -6,6 +6,8 @@
 		@downloader="downloader = true"
 	/>
 
+	<CardGenerateModal v-if="aiModal" @close="aiModal = false" @cardsGenerated="addCards" />
+
 	<SavePanel v-if="title" :cards="cardSet" :title="title" />
 	<LoadingView v-if="loading" />
 	
@@ -24,7 +26,7 @@
 			@downloadPDF="downloadPDF"
 		/>
 		<RouterLink :to="{ name: 'Repetition', params: { set_id: props.set_id }}">
-			<div class="bubbleButton">
+			<div class="bubbleButton fullWidth">
 				Practice this set
 				<div class="tooltip down">Learn the cards, focussing on the ones you don't know.</div>
 			</div>
@@ -104,6 +106,7 @@
 		<button v-if="!editing" class="iconButton" @click="editing = !editing">
 			<i :class="editing ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash'"></i>
 		</button>
+		<button class="bubbleButton fullWidth" @click="aiModal=true"><i class="fa-solid fa-wand-magic-sparkles"></i>AI generate cards</button>
 		<!--<button class="iconButton" @click="doShuffle"><i class="fa-solid fa-shuffle"></i></button>-->
 		<CardView @shuffle="doShuffle" :cardSet="cardSet" />
 	</div>
@@ -118,6 +121,7 @@ import FileOpener from "../components/FileOpener.vue";
 import SavePanel from "../components/SavePanel.vue";
 import LoadingView from "./LoadingView.vue";
 import AccountBar from '../components/AccountBar.vue';
+import CardGenerateModal from '../components/CardGenerateModal.vue';
 
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -161,6 +165,7 @@ const emptyCard = {
 
 const fileOpener = ref(false);
 const downloader = ref(false);
+const aiModal = ref(false);
 
 const title = ref(null);
 const cardSet = ref([{... emptyCard}]);
@@ -350,6 +355,20 @@ function resizeAll() {
 	for (let i = 0; i < elms.length; i++) {
 		resize(elms[i]);
 	}
+}
+
+function addCards(set) {
+	console.log("add cards");
+	console.log(set);
+	set.cards.forEach((card) => {
+		cardSet.value.push(card);
+	});
+
+	const first = cardSet.value[0];
+	if (first.answer == "" && first.question == "") {
+		cardSet.value.shift();
+	}
+	aiModal.value = false;
 }
 </script>
 
