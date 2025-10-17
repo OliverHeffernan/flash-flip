@@ -357,7 +357,7 @@ function resizeAll() {
 	}
 }
 
-function addCards(set) {
+async function addCards(set) {
 	console.log("add cards");
 	console.log(set);
 	set.cards.forEach((card) => {
@@ -369,6 +369,8 @@ function addCards(set) {
 		cardSet.value.shift();
 	}
 	aiModal.value = false;
+	await nextTick();
+	resizeAll();
 }
 </script>
 

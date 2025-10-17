@@ -1,5 +1,5 @@
 <template>
-
+	<LoadingView v-if="loading" />
 	<div class="modal popup">
 		<button @click="emit('close')" class="close iconButton"><i class="fa-solid fa-xmark"></i></button>
 		<h3>Paste your notes below, or provide a description of what you are studying.</h3>
@@ -20,7 +20,7 @@
 	overflow-y: auto;
 	overflow-x: none;
 	position: fixed;
-	z-index: 20;
+	z-index: 19;
 
 	background-color: var(--prim);
 }
@@ -34,6 +34,7 @@ textarea {
 
 import { createClient } from '@supabase/supabase-js';
 import ErrorBubble from "./ErrorBubble.vue";
+import LoadingView from "../views/LoadingView.vue";
 
 import { ref, defineEmits } from 'vue';
 
@@ -46,13 +47,20 @@ const instructions = ref("");
 const cardCount = ref("");
 const errorMsg = ref("");
 
+const loading = ref(false);
+
 async function generateCards() {
+	if (loading.value) return;
+	loading.value = true;
 	errorMsg.value = "";
 	if (!parseInt(cardCount.value)) {
 		errorMsg.value += "Card count is not a number.";
 	}
 
-	if (errorMsg.value != "") return;
+	if (errorMsg.value != "") {
+		loading.value = false;
+		return;
+	}
 
 
 	const { data, error } = await client.functions.invoke('generate-flashcards', {
@@ -64,6 +72,7 @@ async function generateCards() {
 		return error;
 	}
 	emit('cardsGenerated', data);
+	loading.value = false;
 	return data;
 }
 
