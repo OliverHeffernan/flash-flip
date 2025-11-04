@@ -50,10 +50,12 @@ function deleteDialog(payload) {
 }
 
 async function deleteSet(id) {
-	const error = await supabase
+    console.log("Deleting set with id:", id);
+    // eslint-disable-next-line no-unused-vars
+    const { data, error } = await supabase
 		.from('sets')
 		.delete()
-		.eq('id', id).error;
+		.eq('id', id);
 	if (error) {
 		alert(error);
 		return;
